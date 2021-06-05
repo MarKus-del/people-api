@@ -1,28 +1,29 @@
 package com.markusdel.peopleapi.controller;
 
-import com.markusdel.peopleapi.entity.Person;
-import com.markusdel.peopleapi.repository.PersonRepository;
+import com.markusdel.peopleapi.dto.response.MessageResponseDTO;
+import com.markusdel.peopleapi.dto.resquest.PersonDTO;
+import com.markusdel.peopleapi.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/people")
 public class PersonController {
 
-    private PersonRepository personRepository;
+    private PersonService personService;
 
     @Autowired
-    public PersonController(PersonRepository personRepository) {
-        this.personRepository = personRepository;
+    public PersonController(PersonService personService) {
+        this.personService = personService;
     }
 
     @PostMapping
-    public Person createPerson(@RequestBody Person person){
-
-
-        return personRepository.save(person);
+    @ResponseStatus(HttpStatus.CREATED)
+    public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO) {
+        return personService.createPerson(personDTO);
     }
+
 }
