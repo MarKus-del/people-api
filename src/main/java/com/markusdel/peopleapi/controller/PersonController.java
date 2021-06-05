@@ -2,6 +2,7 @@ package com.markusdel.peopleapi.controller;
 
 import com.markusdel.peopleapi.dto.response.MessageResponseDTO;
 import com.markusdel.peopleapi.dto.resquest.PersonDTO;
+import com.markusdel.peopleapi.exception.PersonNotFoundException;
 import com.markusdel.peopleapi.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,11 @@ public class PersonController {
     @GetMapping
     public List<PersonDTO> getAll() {
         return personService.listAll();
+    }
+
+    @GetMapping("/{id}")
+    public PersonDTO getPersonById(@PathVariable Long id) throws PersonNotFoundException {
+        return personService.findById(id);
     }
 
 }

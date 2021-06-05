@@ -3,13 +3,14 @@ package com.markusdel.peopleapi.service;
 import com.markusdel.peopleapi.dto.response.MessageResponseDTO;
 import com.markusdel.peopleapi.dto.resquest.PersonDTO;
 import com.markusdel.peopleapi.entity.Person;
+import com.markusdel.peopleapi.exception.PersonNotFoundException;
 import com.markusdel.peopleapi.mapper.PersonMapper;
 import com.markusdel.peopleapi.repository.PersonRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,5 +38,12 @@ public class PersonService {
                 .stream()
                 .map(personMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public PersonDTO findById(Long id) throws PersonNotFoundException {
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundException(id));
+
+        return personMapper.toDTO(person);
     }
 }
